@@ -237,17 +237,15 @@
   Dialect is either :clj or :cljs."
   ([path]
    (with-open [file-reader (FileReader. path)]
-     (if-let [ns-form (parse/read-ns-decl (readers/indexing-push-back-reader
+     (when-let [ns-form (parse/read-ns-decl (readers/indexing-push-back-reader
                                            (PushbackReader. file-reader)))]
-       (with-meta ns-form (extract-ns-meta (slurp path)))
-       (throw (IllegalStateException. (str "No ns form at " path))))))
+       (with-meta ns-form (extract-ns-meta (slurp path))))))
   ([dialect path]
    (with-open [file-reader (FileReader. path)]
-     (if-let [ns-form (parse/read-ns-decl (readers/indexing-push-back-reader
+     (when-let [ns-form (parse/read-ns-decl (readers/indexing-push-back-reader
                                            (PushbackReader. file-reader))
                                           {:read-cond :allow :features #{dialect}})]
-       (with-meta ns-form (extract-ns-meta (slurp path)))
-       (throw (IllegalStateException. (str "No ns form at " path)))))))
+       (with-meta ns-form (extract-ns-meta (slurp path)))))))
 
 (defn path->namespace
   "Read the ns form found at PATH and return the namespace object for

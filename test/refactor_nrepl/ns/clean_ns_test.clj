@@ -82,10 +82,10 @@
   (is (thrown? IllegalArgumentException
                (clean-ns ns-with-exclude))))
 
-(deftest throws-on-malformed-ns
-  (is (thrown? IllegalStateException
-               (core/read-ns-form (.getAbsolutePath
-                                   (File. "test/resources/clojars-artifacts.edn"))))))
+(deftest returns-nil-on-missing-ns-declaration
+  (is (not (core/read-ns-form
+            (.getAbsolutePath
+             (File. "test/resources/clojars-artifacts.edn"))))))
 
 (deftest preserves-other-elements
   (let [actual (clean-ns ns1)

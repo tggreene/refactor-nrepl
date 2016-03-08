@@ -135,8 +135,9 @@
   ([^File f]
    (get-libspecs-from-file :clj f))
   ([dialect ^File f]
-   (some->> f
-            .getAbsolutePath
-            (core/read-ns-form dialect)
-            ((juxt get-libspecs get-required-macros))
-            (mapcat identity))))
+   (or (some->> f
+                .getAbsolutePath
+                (core/read-ns-form dialect)
+                ((juxt get-libspecs get-required-macros))
+                (mapcat identity))
+       '())))
